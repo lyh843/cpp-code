@@ -3,8 +3,8 @@
 # *.out
 # */.vscode
 # *.pdf
-!
-*.cpp
-*.h
-*.tex
-*.pdf
+*
+!.cpp
+!.h
+!.tex
+!.pdf
