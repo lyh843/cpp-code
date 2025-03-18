@@ -14,74 +14,44 @@ bool Date::isValidDate() const {
     //TODO
     //这个函数需要被其他函数使用
     //未到日期也属于正常输入
-    if(this->year >= 0)
+    if(year >= 0)
     {
-        if(this->month >= 1 && this->month <=12)
+        if(month >= 1 && month <=12)
         {
-            if(this->month == 1 || this->month == 3 || this->month == 5 || this->month == 7 || this->month == 8 || this->month == 10 || this->month == 12)
+            if(month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
             {
-                if(this->day >= 1 && this->day <=31)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                if(day >= 1 && day <=31) return true;
+                else return false;
             }
-            else if(this->month == 4 || this->month == 6 || this->month == 9 || this->month == 11)
+            else if(month == 4 || month == 6 || month == 9 || month == 11)
             {
-                if(this->day >= 1 && this->day <= 30)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                if(day >= 1 && day <= 30) return true;
+                else return false;
             }
-            else //this->month == 2
+            else //month == 2
             {
-                if(isLeapYear(this->year))
+                if(isLeapYear(year))
                 {
-                    if(this->day >= 1 && this->day <= 29)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    if(day >= 1 && day <= 29) return true;
+                    else return false;
                 }
                 else
                 {
-                    if(this->day >= 1 && this->day <= 28) return true;
+                    if(day >= 1 && day <= 28) return true;
                     else return false;
                 }
             }
         }
-        else
-        {
-            return false;
-        }
+        else return false;
     }
-    else
-    {
-        return false;
-    }
+    else return false;
 }
 
 // 判断是否是闰年
 bool Date::isLeapYear(int y) const {
     //TODO
-    if((y % 4 == 0 && y % 100 != 0) || y % 400 == 0)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    if((y % 4 == 0 && y % 100 != 0) || y % 400 == 0) return true;
+    else return false;
 }
 
 // 返回该月的天数
@@ -102,14 +72,12 @@ int Date::daysInMonth(int m, int y) const {
 int Date::daysSinceEpoch() const {
     int totalDays = 0;
     // TODO: 计算当前年份中到当前日期的天数
-    if(this->isValidDate())
+    if(isValidDate())
     {
         for(int i = 1; i < year; i++)
         {
-            for(int j = 1; j <= 12; j++)
-            {
-                totalDays += this->daysInMonth(j, i);
-            }
+            if(isLeapYear(i)) totalDays += 366;
+            else totalDays += 365;
         }
         for(int i = 1; i < month; i++)
         {
@@ -128,16 +96,13 @@ int Date::daysSinceEpoch() const {
 // 计算从某个日期到另一个日期的天数差
 int Date::calculateDaysBetween(const Date &other) const {
     //TODO
-    if(this->isValidDate() && other.isValidDate())
+    if(isValidDate() && other.isValidDate())
     {
-        int day1 = this->daysSinceEpoch();
+        int day1 = daysSinceEpoch();
         int day2 = other.daysSinceEpoch();
         return (day2 > day1) ? (day2 - day1) : (day1 - day2);
     }
-    else
-    {
-        return -1;
-    }
+    else return -1;
     //如果任意一个日期非法，返回-1
 }
 

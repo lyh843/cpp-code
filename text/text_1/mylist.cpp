@@ -39,20 +39,15 @@ void MyList::insert(int index, int value) {
     if(index >= 0 && index <= list_size)
     {
         list_size++;
+        Node *newnode = new Node(value);
         if(index == 0)
         {
-            Node *newnode = new Node(value);
             newnode->next = head;
             head = newnode;
         }
         else
         {
-            Node *curr = head;
-            for(int i = 0; i < index - 1; i++)
-            {
-                curr = curr->next;
-            }
-            Node *newnode = new Node(value);
+            Node *curr = getNodeAt(index - 1);
             newnode->next = curr->next;
             curr->next = newnode;
         }
@@ -79,11 +74,7 @@ void MyList::remove(int index) {
         }
         else
         {
-            Node *curr = head;
-            for(int i = 0; i < index - 1; i++)
-            {
-                curr = curr->next;
-            }
+            Node *curr = getNodeAt(index - 1);
             Node *freenode = curr->next;
             curr->next = curr->next->next;
             delete(freenode);
@@ -107,12 +98,8 @@ int MyList::get(int index) const {
         }
         else
         {
-            Node *curr = head;
-            for(int i = 0; i < index - 1; i++)
-            {
-                curr = curr->next;
-            }
-            return curr->next->value;
+            Node *curr = getNodeAt(index);
+            return curr->value;
         }
     }
     else
@@ -134,12 +121,8 @@ void MyList::set(int index, int value) {
         }
         else
         {
-            Node *curr = head;
-            for(int i = 0; i < index - 1; i++)
-            {
-                curr = curr->next;
-            }
-            curr->next->value = value;
+            Node *curr = getNodeAt(index);
+            curr->value = value;
         }
     }
     else
@@ -176,11 +159,7 @@ int MyList::sum_from(int index, int k) const {
     if(index <= list_size - 1 && index >= 0 && index + k <= list_size && k >= 0)
     {
         int num = 0;
-        Node *curr = head;
-        for(int i = 0; i < index; i++)
-        {
-            curr = curr->next;
-        }
+        Node *curr = getNodeAt(index);
         for(int i = 0; i < k; i++)
         {
             num += curr->value;
@@ -198,7 +177,7 @@ int MyList::sum_from(int index, int k) const {
 void MyList::reverse() {
     //TODO
     //注意指针的操作，我们不希望你只是交换值
-    Node *curr = this->head, *next = nullptr, *prev = nullptr;
+    Node *curr = head, *next = nullptr, *prev = nullptr;
     while(curr)
     {
         next = curr->next;
@@ -211,13 +190,9 @@ void MyList::reverse() {
 
 void MyList::merge(MyList& other){
     //TODO
-    Node *curr = this->head;
-    while(curr->next)
-    {
-        curr = curr->next;
-    }
+    Node *curr = getNodeAt(list_size - 1);
     curr->next = other.head;
-    this->list_size += other.list_size;
+    list_size += other.list_size;
 }
 //可以用这个main函数本地测试！或者修改内容~
 //提交时候务必注释哦~

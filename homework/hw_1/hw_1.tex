@@ -1,0 +1,270 @@
+\documentclass{article}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb} % 添加 amssymb 以支持更多符号
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{xcolor} % 颜色支持
+\definecolor{ForestGreen}{RGB}{34, 139, 34}
+\lstset{
+    language=C++, % 设置语言
+    basicstyle=\ttfamily\small, % 基本字体
+    numbers=left, % 行号在左侧
+    numberstyle=\tiny\color{gray}, % 行号样式
+    frame=single, % 边框
+    captionpos=b, % 标题位置（底部）
+    breaklines=true, % 自动换行
+    keywordstyle=\color{blue}, % 关键字颜色
+    commentstyle=\color{ForestGreen}, % 注释颜色
+    stringstyle=\color{red}, % 字符串颜色
+    tabsize=4 % 制表符替换为4空格
+}
+\title{高级程序设计 作业一}
+\author{李云浩 241880324}   
+\date{\today}
+\begin{document}
+\maketitle
+\section{题目 1}
+"this"指针是在类的各个除静态成员函数的成员函数中隐藏的一个形参，
+这个指针指向调用该成员函数的对象。编译时会添加该指针，以此来表面当前操作的对象。
+当在函数进行过程中时需要对对象整体进行操作的时候，这可以显式使用"this"指针，
+来代替对象。以及当函数的参数与类的数据成员同名时，
+可以用"this"指针指向类的数据成员。
+
+\section{题目 2}
+\textbf{需要自定义析构函数的情况：}
+\begin{itemize}
+    \item 1.对象在创建后申请了一些资源，并且在消亡前没有归还。
+    例如：对象的数据成员中包含指针，在创建后指针"new"了一个动态内存空间。
+    \item 2.程序运行时会需要显式调用析构函数的时候，将一些数据成员还原到初始值。
+    例如：用对象模拟栈时，调用析构函数清空栈，需要让$len = 0; \quad str = NULL$。
+    \item 2.想在析构时输出“析构成功”等语句。
+    例如：
+    \begin{lstlisting}
+    ~A(){
+        cout<<"destroyed success."<<endl;
+    }
+    \end{lstlisting}
+\end{itemize}
+
+\textbf{析构函数需要归还的资源：}
+\begin{itemize}
+    \item 1.对象在创建后额外申请的资源（动态内存）。
+\end{itemize}
+
+\textbf{析构函数不需要归还的资源：}
+\begin{itemize}
+    \item 1.对象的数据成员。
+    \item 2.对象自身。
+\end{itemize}
+
+\section{题目 3}
+\textbf{调用拷贝构造函数的情况：}
+\begin{itemize}
+    \item 1.在创建一个对象时，使用另一个已有的同类对象对其进行初始化。
+    \item 2.把对象作为值参数传给函数时。
+    \item 3.把对象作为函数的返回值时。
+\end{itemize}
+
+\textbf{隐式拷贝构造函数可能导致运行错误的原因：}
+浅拷贝会将对象的数据成员的值直接复制给新创建的对象。当对象的成员中存在指针时，
+新对象的指针会与所拷贝的对象的指针指向同一个地址，而不是把指向的内容拷贝到新的内存中。
+那么此后通过新对象修改该空间的内容时，会影响一开始的对象。此外，在析构函数中释放动态内存时，
+会对同一块内存空间进行两次归还，导致程序运行错误。或者其中一个对象析构时
+会使得另一个对象无法调用该内存空间的数据。
+
+\section{题目 4}
+浅拷贝会把对象的数据成员的值直接复制给新创建的对象。当对象的成员中存在指针时，
+浅拷贝会把指针所指向的地址拷贝一份给新对象，而深拷贝会把指针所指向的内存空间的内容进行拷贝
+让新对象指向这块新拷贝出来的空间。
+
+\section{题目 5}
+\begin{lstlisting}
+    #include <iostream>
+
+    class Account{
+    public:
+        //构造函数，针对用户传入的参数对对象进行赋值
+        Account(char *a, char *b, int c);   
+        //显示函数，无需对对象的数值进行修改
+        void display()const;    
+        //存入函数
+        void deposit(int in_money);    
+        //取出函数
+        void take_out(int out_money);   
+    private:
+        //账户的数据成员，其中姓名和账号用char*类型指向用户输入的字符串。
+        char *name; //储户姓名
+        char *account_number;   //账号
+        int money;  //存款
+};
+\end{lstlisting}
+
+\section{题目 6}
+\begin{lstlisting}
+    class Deque{
+    public:
+        Deque();
+        ~Deque();
+        void push_front(int x);
+        void push_back(int x);
+        void pop_front();
+        void pop_back();
+        size_t size() const;
+    private:
+        struct Node{
+            int val;
+            struct Node* prev;
+            struct Node* next;
+            Node(int x);
+        };
+        Node* head;
+        Node* tail;
+    };
+
+    Deque::Deque(){
+        head = nullptr;
+        tail = nullptr;
+    }
+
+    Deque::Node::Node(int x): val(x), prev(nullptr), next(nullptr){}
+
+    Deque::~Deque(){
+        while(head)
+        {
+            Node *denode = head;
+            head = head->next;
+            delete denode;
+        }
+        tail = nullptr;
+    }
+
+    void Deque::push_front(int x){
+        Node* newnode = new Node(x);
+        if(head)
+        {
+            newnode->next = head;
+            head->prev = newnode;
+            head = newnode;
+        }
+        else
+        {
+            head = newnode;
+            tail = newnode;
+        }
+    }
+
+    void Deque::push_back(int x){
+        Node* newnode = new Node(x);
+        if(tail)
+        {
+            newnode->prev = tail;
+            tail->next = newnode;
+            tail = newnode;
+        }
+        else
+        {
+            head = newnode;
+            tail = newnode;
+        }
+    }
+
+    void Deque::pop_front(){
+        if(head)
+        {
+            Node* denode = head;
+            if(head == tail) tail = nullptr;
+            head = head->next;
+            if(head) head->prev = nullptr;
+            delete denode;
+        }
+    }
+
+    void Deque::pop_back(){
+        if(tail)
+        {
+            Node* denode = tail;
+            if(tail == head) head = nullptr;
+            tail = tail->prev;
+            if(tail) tail->next = nullptr;
+            delete denode;
+        }
+    }
+
+    size_t Deque::size()const{
+        Node* curr = head;
+        int size = 0;
+        while(curr)
+        {
+            size++;
+            curr = curr->next;
+        }
+        return size;
+    }
+\end{lstlisting}
+
+
+\section{题目 7}
+\begin{lstlisting}
+    #include <iostream>
+    #include <cstring>
+    using namespace std;
+    class Book{
+        static int BookCnt;
+        char *name;
+        public:
+            Book(const char * _name);
+            ~Book();
+            char * get_name() const;
+            //void set_name(const char * _name) const;
+            //该函数会对对象的数据进行修改，不应该后缀const
+            void set_name(const char * _name);
+            //对象的数据成员中含有指针，应该添加深拷贝函数
+            Book(const Book& other);
+    };
+    
+    //对BookCnt进行初始化
+    int Book::BookCnt = 0;
+    
+    Book::Book(const char * _name){
+        name = new char[strlen(_name) + 1];
+        strcpy(name, _name);
+        BookCnt++;
+    }
+    
+    //增加深拷贝构造函数
+    Book::Book(const Book& other){
+        name = new char[strlen(other.name) + 1];
+        strcpy(name, other.name);
+        BookCnt++;
+    }
+    
+    Book::~Book(){
+        delete []name;
+        name = nullptr;
+        //如果确保析构后不会再次调用已被析构的对象，此处应该赠添BookCnt--
+        BookCnt--;
+    }
+    
+    char* Book::get_name() const{
+        return name;
+    }
+    
+    //void Book::set_name(const char* _name) const{
+    //该函数会对对象的数据进行修改，不应该后缀const
+    void Book::set_name(const char* _name){
+        delete []name;
+        name = new char[strlen(_name) + 1];
+        strcpy(name, _name);
+    }
+    
+    int main(){
+        Book b1("Computer Science");
+        //此处会进行拷贝，对象的数据成员中存在指针，应该使用深拷贝
+        Book b2(b1);
+        return 0;
+    }
+\end{lstlisting}
+\end{document}
