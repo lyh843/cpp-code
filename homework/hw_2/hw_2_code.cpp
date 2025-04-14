@@ -4,7 +4,9 @@
 class Account{
 public:
     //构造函数，针对用户传入的参数对对象进行赋值
-    Account(char* a, char* b, int c);   
+    Account(char* a, char* b, int c);
+    //析构函数，释放用户姓名和账号所申请的空间
+    ~Account();
     //显示函数，无需对对象的数值进行修改
     void display() const;    
      //存入函数

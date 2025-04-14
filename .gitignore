@@ -1,10 +1,5 @@
-# # Executables
-# *.exe
-# *.out
-# */.vscode
-# *.pdf
-*
-!.cpp
-!.h
-!.tex
-!.pdf
+# Executables
+*.exe
+*.out
+*/.vscode
+*.pdf

@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C++ Debug",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${fileDirname}/${fileBasenameNoExtension}",
+      "cwd": "${workspaceFolder}",
+      "MIMode": "gdb",
+      "miDebuggerPath": "D:/software LYH/winlibs-x86_64-posix-seh-gcc-12.1.0-llvm-14.0.6-mingw-w64ucrt-10.0.0-r3/mingw64/bin/gdb.exe",  // 👉 根据你的路径改一下
+      "setupCommands": [
+        { "description": "启用漂亮打印", "text": "-enable-pretty-printing" },
+        
+        // ✅ 忽略标准库相关路径（注意使用双反斜杠）
+        { "text": "skip -gfi .*\\\\bits\\\\.*" },
+        { "text": "skip -gfi .*\\\\c\\+\\+\\\\.*" },
+        { "text": "skip -gfi .*\\\\include\\\\.*" }
+      ],
+      "justMyCode": true, // 👉 不进入非用户代码（有些 GDB 版本忽略这个，但加上保险）
+      "stopAtEntry": false,
+      "externalConsole": false
+    }
+  ]
+}
