@@ -1,0 +1,31 @@
+Normal Alice Bob Charlie
+VIP Bob Gold Alice
+Normal Charlie Alice Bob
+Normal David Eve
+VIP Eve Platinum Frank Grace
+Normal Frank Grace
+VIP Grace Diamond Bob Charlie Alice
+Normal Henry Ian
+Normal Ian Henry Jack
+VIP Jack Gold Kevin
+Normal Kevin Leo Mike
+Normal Leo Nancy
+VIP Mike Platinum Oscar Paul
+Normal Nancy Quincy
+Normal Oscar Nancy Mike
+VIP Paul Gold Nancy Oscar
+Normal Quincy Bob Alice
+VIP Rachel Diamond David Charlie
+Normal Steve Tina
+Normal Tina Steve Uma
+VIP Uma Gold Tina Steve
+Normal Victor Wendy
+VIP Wendy Platinum Alice Rachel
+Normal Xavier Yolanda Zach
+Normal Yolanda Xavier
+VIP Zach Diamond Uma Kevin Bob
+Normal Alan Bella
+VIP Bella Gold Alan Ian
+Normal Carl Dana
+Normal Dana Carl Eve
+VIP lyh Diamond

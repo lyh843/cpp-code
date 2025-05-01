@@ -1,15 +1,11 @@
 #include <iostream>
 #include "trie.h"
 
-TrieNode::TrieNode() {
+TrieNode::TrieNode() :val(' '), isend(false){
     // TODO
-    val = ' ';
-    isend = false;
 }
-TrieNode::TrieNode(char v) {
+TrieNode::TrieNode(char v) :val(v), isend(false){
     // TODO
-    val = v;
-    isend = false;
 }
 TrieNode::~TrieNode() {
     // TODO
@@ -169,6 +165,7 @@ int main() {
     std::cout << trie->Prefix("ban") << std::endl;  // 输出 2 (["banana", "band"])
     std::cout << trie->Prefix("bana") << std::endl; // 输出 1 (["banana"])
     std::cout << trie->Prefix("bandit") << std::endl; // 输出 0: 没有任何以 "bandit" 开头的单词
+    // @debugger-kit visualize as tree
     delete trie;
     return 0;
 }
